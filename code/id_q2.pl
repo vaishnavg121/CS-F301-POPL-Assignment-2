@@ -26,3 +26,47 @@ expression(Numbers, Tree, Value) :-
         Tree = op('/', LeftTree, RightTree),
         Value is LeftValue // RightValue
     ).
+
+% format_expression(+Tree, -String)
+% Serialize an expression tree with the minimal parentheses required to
+% preserve its structure under standard precedence and left associativity.
+% Leaves are non-negative integers; result is an SWI-Prolog string.
+format_expression(num(N), String) :-
+    integer(N),
+    N >= 0,
+    number_string(N, String).
+
+format_expression(op(Op, Left, Right), String) :-
+    memberchk(Op, ['+', '-', '*', '/']),
+    format_expression(Left, LeftBare),
+    format_expression(Right, RightBare),
+    (   memberchk(Op, ['*', '/'])
+    ->  ParentPrecedence = 2
+    ;   ParentPrecedence = 1
+    ),
+    % The left operand needs parentheses only for lower precedence.
+    (   Left = op(LeftOp, _, _)
+    ->  (   memberchk(LeftOp, ['*', '/'])
+        ->  LeftPrecedence = 2
+        ;   LeftPrecedence = 1
+        ),
+        (   LeftPrecedence < ParentPrecedence
+        ->  format(string(LeftString), '(~s)', [LeftBare])
+        ;   LeftString = LeftBare
+        )
+    ;   LeftString = LeftBare
+    ),
+    % Equal precedence on the right must also be parenthesized to retain
+    % the tree, even for associative operators such as + and *.
+    (   Right = op(RightOp, _, _)
+    ->  (   memberchk(RightOp, ['*', '/'])
+        ->  RightPrecedence = 2
+        ;   RightPrecedence = 1
+        ),
+        (   RightPrecedence =< ParentPrecedence
+        ->  format(string(RightString), '(~s)', [RightBare])
+        ;   RightString = RightBare
+        )
+    ;   RightString = RightBare
+    ),
+    format(string(String), '~s~w~s', [LeftString, Op, RightString]).
