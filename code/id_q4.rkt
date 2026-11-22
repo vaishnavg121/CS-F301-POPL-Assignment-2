@@ -36,3 +36,7 @@
                     (cons x new-elements)
                     new-elements)))))
     walk))
+
+;; Specialize the higher-order transformer to lists shorter than n.
+(define (insert-if-short x lst n)
+  ((make-inserter x (lambda (size) (< size n))) lst))
