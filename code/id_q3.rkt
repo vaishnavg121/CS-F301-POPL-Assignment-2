@@ -35,3 +35,20 @@
   (newline)
   (display (postorder-onto tree '()))
   (newline))
+
+;; Return (height leaf-count) while visiting each subtree only once.
+(define (tree-metrics tree)
+  (if (null? tree)
+      (list 0 0)
+      (let* ((left (cadr tree))
+             (right (caddr tree))
+             (left-metrics (tree-metrics left))
+             (right-metrics (tree-metrics right)))
+        (list (+ 1 (max (car left-metrics) (car right-metrics)))
+              (if (and (null? left) (null? right))
+                  1
+                  (+ (cadr left-metrics) (cadr right-metrics)))))))
+
+(define (print-height-and-leaves tree)
+  (display (tree-metrics tree))
+  (newline))
