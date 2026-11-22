@@ -16,3 +16,9 @@ The two original Windows runs each passed all 30 tests with zero skips in SWI-Pr
 `python3 tools/offline_scheme_sim.py` evaluates the source in a restricted Python Scheme evaluator. `python3 tools/randomized_audit.py` compares that evaluator's results with independent reference logic on 100 trees, 150 nested lists, and one 100-level nested list. These are source-level checks. The GitHub Actions and Windows results report native interpreter runs.
 
 The strict runner exits nonzero on test failure, interpreter error, any skipped test, or discovery of fewer than 30 tests. File discovery matches the four assignment suffixes, so replacing the `id_` prefixes with the official group ID preserves test discovery.
+
+## Follow-up runtime verification
+
+The follow-up audit passed 31 tests with zero failures and zero skips on SWI-Prolog 9.2.9 and the installed Racket CS 8.18 engine. The expanded suite also passed against the published implementations and in a temporary copy with a different prefix on all four source files. The Racket engine was launched through its embedding entry point after the standard Windows launcher hit a DLL relocation error.
+
+The follow-up tests cover nonconsecutive and repeated P1 clues, nested integer division and finite P2 failure, actual S1 subtree call order, and S2 insertion at thresholds 10,000 and 10,001 on the same 10,000-element list.
