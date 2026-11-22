@@ -40,3 +40,11 @@
 ;; Specialize the higher-order transformer to lists shorter than n.
 (define (insert-if-short x lst n)
   ((make-inserter x (lambda (size) (< size n))) lst))
+
+;; Entry point is a definition only; the caller performs the invocation.
+(define (print-insert-result)
+  (let* ((x (read))
+         (lst (read))
+         (n (read)))
+    (display (insert-if-short x lst n))
+    (newline)))
