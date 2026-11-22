@@ -1,85 +1,67 @@
-# CS F301 — Assignment 2: Logic and Functional Programming
+# CS F301 Principles of Programming Languages — Assignment 2
 
-A group repository for the four required programming-language problems. The two confirmed members and institute IDs are recorded in [`GROUP_MEMBERS.md`](GROUP_MEMBERS.md). The group ID is not yet known; before submitting, replace the `id` prefix in all four code filenames with the confirmed group ID, and use the group ID as the root repository/directory name.
+**Logic and Functional Programming** · BITS Pilani, Hyderabad Campus
 
-## Required deliverables
+| Group member | Institute ID |
+| --- | --- |
+| Venkatanaga Vaishnav Gadamsetty | 2024A7PS0026H |
+| Chaitrali Dharmadhikari | 2024A7PS0133H |
 
-- `code/id_q1.pl` — P1 department puzzle, clues 1–9, solving, solution count and output.
-- `code/id_q2.pl` — P2 arithmetic expression generation, canonical formatting and equation enumeration/counting.
-- `code/id_q3.rkt` — S1 inorder, all traversals, tree height and leaves.
-- `code/id_q4.rkt` — S2 nested insertion, custom length/map, higher-order inserter, input/output.
-- `tests/test_p1.py`, `tests/test_p2.py`, `tests/test_s1.py`, `tests/test_s2.py` — one test file per problem, including the assignment's examples and edge cases.
-- `skills/prolog-dev/SKILL.md`, `skills/scheme-dev/SKILL.md` — reusable development/review skills.
-- `prompts/P1.md`, `prompts/P2.md`, `prompts/S1.md`, `prompts/S2.md` — actual prompts, quoted verbatim, with separately identified implementation notes.
-- `P1_REPORT.md` — original solution count and unique repair.
+This assignment uses Prolog for constraint solving and equation enumeration, and Scheme for recursive traversal and transformation.
 
-## Required environment and commands
+| Problem | Implementation |
+| --- | --- |
+| **P1 — Department Assignment Puzzle, Reloaded** | Generates complete assignments and filters them by numbered clues. The original eight clues allow three solutions. An attribute-only ninth clue leaves one. |
+| **P2 — Form a Valid Arithmetic Equation** | Enumerates expressions over consecutive input numbers, checks exact integer division, and returns distinct, sorted equation strings with canonical parentheses. |
+| **S1 — Binary Tree Traversals** | Prints inorder, preorder, and postorder traversals and computes tree height and leaf count. |
+| **S2 — Conditionally Insert into a Nested List** | Builds a higher-order inserter that checks the original length of each list, including the outermost list and empty lists. |
 
-Use **SWI-Prolog 9.x** and **Racket 8.x**. The assignment's grading commands use the group-ID-renamed files, for example:
+## Repository layout
 
-```bash
+| Path | Contents |
+| --- | --- |
+| [code/](code/) | Four source files, `id_q1.pl` through `id_q4.rkt` |
+| [tests/](tests/) | One test file per problem |
+| [skills/](skills/) | Prolog and Scheme development instructions |
+| [prompts/](prompts/) | Verbatim AI requests and review outcomes, organized by problem |
+| [P1_REPORT.md](P1_REPORT.md) | P1 solution count and ninth-clue repair |
+| [tools/](tools/) and [.github/workflows/](.github/workflows/) | Test runners and GitHub Actions workflow |
+
+## Run the programs
+
+Use **SWI-Prolog 9.x** and **Racket 8.x**. The test harness requires **Python 3**. Run these commands from the repository root.
+
+```text
 swipl -q -f code/id_q1.pl -g main -t halt
-swipl -q -f code/id_q1.pl -g "count_solutions([1,2,3,4,5,6,7,8],N),writeln(N)" -t halt
 swipl -q -f code/id_q2.pl -g "all_equations([4,2,5,3],E),writeln(E)" -t halt
 racket code/id_q3.rkt
 racket code/id_q4.rkt
 ```
 
-The two Racket commands load definitions only and intentionally print nothing. The grader appends its calls. To test a Scheme function, append a call to a **temporary copy** of the source file. To run all automated tests:
+The Racket files load silently. The grader appends function calls. To try the S1 and S2 entry points locally, append a call to a temporary copy of each source. For example, in PowerShell:
 
-```bash
-python3 tools/run_strict_tests.py
+```powershell
+$samples = New-Item -ItemType Directory -Path ([IO.Path]::Combine([IO.Path]::GetTempPath(), [guid]::NewGuid().ToString()))
+$s1 = Join-Path $samples.FullName 's1.rkt'
+$s2 = Join-Path $samples.FullName 's2.rkt'
+Copy-Item code/id_q3.rkt $s1
+Copy-Item code/id_q4.rkt $s2
+Add-Content -Encoding ascii $s1 "`n(print-all-traversals '(1 () (2 () ())))"
+Add-Content -Encoding ascii $s2 "`n(print-insert-result)"
+racket $s1
+'42 ((1 2) (3 4 5) (6) ()) 3' | racket $s2
 ```
 
-This strict command exits nonzero if any test is skipped or fails. A plain `python3 -m unittest discover -s tests -v` is for diagnosis only; it may return zero even when language-runtime tests were skipped. The tests skip runtime assertions if either interpreter is missing. The GitHub Actions workflow now fails if either required runtime major version is absent or if any tests are skipped. Therefore a local run reporting `OK (skipped=...)` **does not** establish runtime correctness. The checked-in GitHub Actions workflow installs both runtimes before executing tests; CI cannot run until the repository is pushed to GitHub.
+## Run the tests
 
-## Submission and collaboration checks
-
-1. Replace `id` with the real group ID in all four code filenames; do not replace it with the student ID unless they are identical.
-2. Preserve the incremental Git history and the actual prompts. The initial broad user request does not by itself demonstrate the assignment's one-predicate/function-per-prompt requirement; see `prompts/` for the accurate record.
-3. Have each group member make their **own genuine contributions and commits** using their verified Git email. Do not retroactively ascribe another person's work to them.
-4. After runtime tests pass, push the repository (not a ZIP) and verify the GitHub Actions test status.
-5. Prepare for the individual viva. The grader assigns separate marks to understanding/ownership.
-
-## Current verification note
-
-The required local Prolog and Racket runtimes were unavailable in the authoring environment. Independent reference checks reproduced P1's solution counts (3 before repair, 1 after) and all three P2 equation examples. Static Scheme checks and source-parenthesis balance passed. The runtime tests must still execute in an actual SWI-Prolog 9.x/Racket 8.x installation or via GitHub Actions.
-
-## Windows laptop validation
-
-The project includes `tools/verify_windows.ps1`, which finds installed language
-runtimes (also searching standard Program Files locations), verifies **SWI-Prolog
-9.x** and **Racket 8.x**, and executes all tests. It fails if tests are skipped.
-
-From Windows PowerShell in the repository root:
+With both language runtimes on your PATH, run `python3 tools/run_strict_tests.py` or `py -3 tools/run_strict_tests.py` on Windows. The Windows verification script also locates the interpreters and checks their major versions.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1
 ```
 
-If either runtime is absent, the optional `-InstallRuntimes` flag tries to
-install an appropriate 9.x/8.x version through WinGet; if those versions are
-not offered, install the exact required major versions from the official
-archives and rerun:
+The strict suite passed **30 tests with zero failures and zero skips** on Windows using SWI-Prolog 9.2.9 and Racket 8.18. GitHub Actions also passed the full suite. See [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md) for run details.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1 -InstallRuntimes
-```
+## Before submission
 
-The runner uses the strict test harness and writes `verification_windows.log` locally; the log is ignored by
-Git. Python is required for the test harness. Tests discover the four source
-files by suffix (`*_q1.pl`, `*_q2.pl`, `*_q3.rkt`, `*_q4.rkt`), so group-ID
-renaming does not break them.
-
-## Supplemental audit
-
-See `TEST_AUDIT.md` for the exact completed checks and unresolved blockers.
-The portable optional source-level reference checks can also run with Python:
-
-```bash
-python3 tools/offline_scheme_sim.py
-python3 tools/randomized_audit.py
-```
-
-These secondary checks use a restricted Python evaluator rather than the
-Racket executable and must never be reported as a Racket 8.x test pass.
+Confirm the official Assignment 1 group ID and use it for the repository root name and the four source filename prefixes. Each student needs genuine, individually attributable Git contributions and must prepare for the individual viva.

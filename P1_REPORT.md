@@ -29,4 +29,4 @@ Carla = [testing, python, AI]
 Dana = [research, c++, data]
 ```
 
-The counts were independently cross-checked by exhaustive enumeration of all `4! × 4! × 4! = 13,824` bijective attribute assignments. SWI-Prolog 9.x runtime execution remains to be performed in the required grading environment.
+The counts were verified in SWI-Prolog 9.2.9 and cross-checked by independent exhaustive enumeration of all `4! × 4! × 4! = 13,824` bijective attribute assignments.

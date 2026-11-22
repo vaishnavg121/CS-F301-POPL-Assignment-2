@@ -1,12 +1,10 @@
-# CS F301 Assignment 2 — Group roster
-
-**Group number:** Pending official Assignment 1 group-number confirmation. Do not substitute a student's ID for the group ID.
+# CS F301 Assignment 2 — Group Members
 
 | Group member | Institute ID |
-|---|---|
+| --- | --- |
 | Venkatanaga Vaishnav Gadamsetty | 2024A7PS0026H |
 | Chaitrali Dharmadhikari | 2024A7PS0133H |
 
-The names and IDs above were provided by the group. This roster does not claim either student authored any particular commit. Git records and actual group participation should be checked separately before submission.
+**Official group ID is pending.** The group continues from Assignment 1. Once confirmed, use that ID for the repository root and for the prefix of each of the four source filenames.
 
-**Repository and submission status:** The final group repository URL is not yet provided. Once the group ID is confirmed, rename `id_q1.pl`, `id_q2.pl`, `id_q3.rkt` and `id_q4.rkt` by replacing `id` with the actual group ID, preserving the suffixes and file extensions. Preserve the Git history and verify that both group members' genuine work is represented by their own commits where applicable.
+The group repository is [CS-F301-POPL-Assignment-2](https://github.com/vaishnavg121/CS-F301-POPL-Assignment-2). The reviewed Git history shows commits authored by Vaishnav only. Chaitrali's individual contribution credit requires her own genuine, attributable commits. Both students should be ready to explain their work in the viva.

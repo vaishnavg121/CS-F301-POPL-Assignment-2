@@ -1,6 +1,6 @@
 # CS F301 Assignment 2 — Individual viva preparation
 
-The source files in `code/` are authoritative. These explanations help members demonstrate their own understanding; they do not replace individual study or actual contributions.
+Use these notes to rehearse the reasoning behind the functions and predicates in `code/` and explain your own contributions.
 
 ## P1: Prolog logic puzzle
 
@@ -34,13 +34,13 @@ Each `clue(N,Solution)` only checks a fully specified candidate. In `solution_fo
 
 **Representation.** An empty tree is `'()` and every node is `(value left right)`. Accessors are `car`, `cadr`, and `caddr` (all allowed). The three standard traversals are inorder `L,N,R`, preorder `N,L,R`, and postorder `L,R,N`.
 
-**Accumulators.** Each `*-onto` helper returns traversal values prepended to an already computed suffix. This avoids `append` and `reverse`, which are forbidden. The traversal visits each node once, so it takes O(number of nodes) time and O(height) recursive-call depth plus result-list space.
+**Accumulators.** Each traversal helper visits the left subtree before the right and adds node values to the front of its accumulator in the appropriate order. A tail-recursive helper reverses the accumulated list before printing. Each traversal takes O(number of nodes) time and list space, with O(height) recursive-call depth during the traversal.
 
 **Height/leaves.** Empty tree has `(0 0)`. A leaf has `(1 1)`. For a nonempty tree, height is `1 + max(left-height,right-height)`; leaves are one for a node with two empty children, otherwise `left-leaves + right-leaves`. `tree-metrics` calculates both values together to avoid repeated traversal.
 
 **Outputs.** `print-inorder` prints one complete list and newline; `print-all-traversals` prints three lists on three lines; `print-height-and-leaves` prints one `(height leaf-count)` list and newline. Definitions do not execute automatically when the source file is loaded.
 
-**Likely viva questions.** What distinguishes traversal orders? What happens on the empty tree or a single node? Why are the helper calls positioned where they are? How do suffix lists avoid `append`? Why is a skewed tree's height equal to its node count?
+**Likely viva questions.** What distinguishes traversal orders? What happens on the empty tree or a single node? How does the accumulator preserve left-first visiting? Why is it reversed before printing? Why is a skewed tree's height equal to its node count?
 
 ## S2: Racket conditional nested insertion
 
@@ -58,4 +58,4 @@ Each `clue(N,Solution)` only checks a fully specified candidate. In `solution_fo
 
 ## Running the grader-style tests
 
-The code files intentionally contain definitions only; read the top-level testing instructions in `README.md`. Execute the `tests/` files in an environment with SWI-Prolog 9.x and Racket 8.x. A Python test report with skipped interpreter-dependent tests is **not** evidence that the language code was executed successfully.
+Use the strict runner described in [README.md](README.md) to run the full suite with SWI-Prolog 9.x and Racket 8.x. See [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md) for the verified results.
