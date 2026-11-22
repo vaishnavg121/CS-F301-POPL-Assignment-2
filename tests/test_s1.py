@@ -70,6 +70,24 @@ class RuntimeS1Tests(unittest.TestCase):
             "(print-height-and-leaves '(a (b () ()) (c () ())))"),
             '(b a c)\n(a b c)\n(b c a)\n(2 2)\n')
 
+    def test_traversals_visit_left_subtree_first(self):
+        # Instrument only the temporary grader driver. Output alone would also
+        # match if a traversal recursively built the right subtree first.
+        self.assertEqual(evaluate(
+            '''(require racket/trace)
+            (define visited '())
+            (current-trace-notify void)
+            (current-trace-print-args
+             (lambda (_name args _keywords _keyword-values _depth)
+               (when (pair? (car args))
+                 (set! visited (cons (caar args) visited)))
+               (newline)))
+            (trace inorder-reversed preorder-reversed postorder-reversed)
+            (print-all-traversals '(r (l (a () ()) ()) (q () (b () ()))))
+            (displayln (reverse visited))'''),
+            '(a l r q b)\n(r l a q b)\n(a l b q r)\n'
+            '(r l a q b r l a q b r l a q b)\n')
+
     def test_single_node_and_left_skew(self):
         self.assertEqual(evaluate(
             "(print-all-traversals '(9 () ()))",
