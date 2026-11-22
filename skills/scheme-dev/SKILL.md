@@ -37,3 +37,5 @@ description: Incrementally implement and review the restricted Racket Scheme par
 - Comparing length after insertion, causing off-by-one errors.
 - Skipping the outermost/empty list or flattening subtrees accidentally.
 - Non-tail recursion that blows the stack or quadratic list construction on large cases.
+
+Run `python3 tools/run_strict_tests.py` from the repository root to exercise the Scheme sources through the grader-style test drivers.
