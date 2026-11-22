@@ -1,6 +1,6 @@
 # CS F301 — Assignment 2: Logic and Functional Programming
 
-A group repository for the four required programming-language problems. The group ID has not yet been supplied; before submitting, replace the `id` prefix in all four code filenames with your group ID, and use the group ID as the root repository/directory name.
+A group repository for the four required programming-language problems. The two confirmed members and institute IDs are recorded in [`GROUP_MEMBERS.md`](GROUP_MEMBERS.md). The group ID is not yet known; before submitting, replace the `id` prefix in all four code filenames with the confirmed group ID, and use the group ID as the root repository/directory name.
 
 ## Required deliverables
 

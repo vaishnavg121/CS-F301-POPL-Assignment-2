@@ -43,7 +43,7 @@ The strict runner currently discovers **30 tests**; it deliberately fails when t
 
 - No direct control of the user's Windows laptop from this chat.
 - This container has no SWI-Prolog or Racket executable, and external package download/DNS failed; therefore 25 interpreter-dependent tests were unavailable.
-- The original final GitHub repository URL, group ID, and membership have not been supplied.
+- The two members and their institute IDs are confirmed in `GROUP_MEMBERS.md`. The official group ID and final GitHub repository URL are still unknown.
 - Neither remote GitHub push nor GitHub Actions has been performed here.
 
 **Don't claim full marks are guaranteed.** Complete the runtime and GitHub checks before the official deadline.
