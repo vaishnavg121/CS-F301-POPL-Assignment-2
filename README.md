@@ -28,10 +28,10 @@ racket code/id_q4.rkt
 The two Racket commands load definitions only and intentionally print nothing. The grader appends its calls. To test a Scheme function, append a call to a **temporary copy** of the source file. To run all automated tests:
 
 ```bash
-python3 -m unittest discover -s tests -v
+python3 tools/run_strict_tests.py
 ```
 
-The tests skip runtime assertions if either interpreter is missing. The GitHub Actions workflow now fails if either required runtime major version is absent or if any tests are skipped. Therefore a local run reporting `OK (skipped=...)` **does not** establish runtime correctness. The checked-in GitHub Actions workflow installs both runtimes before executing tests; CI cannot run until the repository is pushed to GitHub.
+This strict command exits nonzero if any test is skipped or fails. A plain `python3 -m unittest discover -s tests -v` is for diagnosis only; it may return zero even when language-runtime tests were skipped. The tests skip runtime assertions if either interpreter is missing. The GitHub Actions workflow now fails if either required runtime major version is absent or if any tests are skipped. Therefore a local run reporting `OK (skipped=...)` **does not** establish runtime correctness. The checked-in GitHub Actions workflow installs both runtimes before executing tests; CI cannot run until the repository is pushed to GitHub.
 
 ## Submission and collaboration checks
 
@@ -66,7 +66,7 @@ archives and rerun:
 powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1 -InstallRuntimes
 ```
 
-The runner writes `verification_windows.log` locally; the log is ignored by
+The runner uses the strict test harness and writes `verification_windows.log` locally; the log is ignored by
 Git. Python is required for the test harness. Tests discover the four source
 files by suffix (`*_q1.pl`, `*_q2.pl`, `*_q3.rkt`, `*_q4.rkt`), so group-ID
 renaming does not break them.

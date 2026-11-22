@@ -43,12 +43,13 @@ powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1 -InstallRunt
 ```
 
 ```bash
-python3 -m unittest discover -s tests -v
+python3 tools/run_strict_tests.py
 ```
 
 The Windows runner requires SWI-Prolog 9.x and Racket 8.x and fails on test
-skips; the Linux command should be run only after verifying both runtimes are
-installed. GitHub Actions repeats the checks once the repository is pushed.
+skips; the Linux strict runner also exits nonzero if any tests are skipped or fail.
+GitHub Actions uses `set -o pipefail` so the test process cannot fail invisibly
+behind the `tee` logging command. CI can run only after pushing to GitHub.
 
 ## Still required for a real submission
 
