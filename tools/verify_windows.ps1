@@ -76,12 +76,8 @@ if (-not $python) { throw 'Python 3 is required for the four provided test files
 
 Set-Location $Root
 Write-Host 'Running all problem tests, including runtime and stress tests...'
-& $python.Source @pythonArgs -m unittest discover -s tests -v 2>&1 |
+& $python.Source @pythonArgs tools/run_strict_tests.py |
     Tee-Object -FilePath (Join-Path $Root 'verification_windows.log')
 $code = $LASTEXITCODE
-if ($code -ne 0) { throw "Assignment tests FAILED with exit code $code" }
-$log = Get-Content (Join-Path $Root 'verification_windows.log') -Raw
-if ($log -match '(?m)skipped=\d+' -or $log -match '(?m)\.\.\. skipped') {
-    throw 'Test runner reported SKIPPED tests; do not treat this as a full pass.'
-}
-Write-Host 'PASS: all available tests executed without failures or skips.'
+if ($code -ne 0) { throw "Assignment tests FAILED (or skipped) with exit code $code" }
+Write-Host 'PASS: all assignment tests executed without failures or skips.'
