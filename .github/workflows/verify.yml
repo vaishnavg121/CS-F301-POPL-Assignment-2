@@ -1,0 +1,23 @@
+name: Verify assignment code
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  language-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install required runtimes
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swi-prolog-nox racket python3
+          swipl --version
+          racket --version
+      - name: Execute all four test files
+        run: |
+          command -v swipl
+          command -v racket
+          python3 -m unittest discover -s tests -v
