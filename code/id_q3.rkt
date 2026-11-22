@@ -12,3 +12,26 @@
 (define (print-inorder tree)
   (display (inorder-onto tree '()))
   (newline))
+
+;; Traverse preorder and postorder with suffix passing and no extra built-ins.
+(define (preorder-onto tree suffix)
+  (if (null? tree)
+      suffix
+      (cons (car tree)
+            (preorder-onto (cadr tree)
+                           (preorder-onto (caddr tree) suffix)))))
+
+(define (postorder-onto tree suffix)
+  (if (null? tree)
+      suffix
+      (postorder-onto (cadr tree)
+                      (postorder-onto (caddr tree)
+                                      (cons (car tree) suffix)))))
+
+(define (print-all-traversals tree)
+  (display (inorder-onto tree '()))
+  (newline)
+  (display (preorder-onto tree '()))
+  (newline)
+  (display (postorder-onto tree '()))
+  (newline))
