@@ -7,9 +7,12 @@ on:
 jobs:
   language-tests:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install required runtimes
         run: |
           sudo apt-get update
@@ -22,5 +25,4 @@ jobs:
         run: |
           command -v swipl
           command -v racket
-          set -o pipefail
           python3 tools/run_strict_tests.py 2>&1 | tee /tmp/ppl-tests.log
