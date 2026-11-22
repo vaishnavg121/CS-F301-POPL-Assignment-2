@@ -70,6 +70,16 @@ class RuntimeS1Tests(unittest.TestCase):
             "(print-height-and-leaves '(a (b () ()) (c () ())))"),
             '(b a c)\n(a b c)\n(b c a)\n(2 2)\n')
 
+    def test_single_node_and_left_skew(self):
+        self.assertEqual(evaluate(
+            "(print-all-traversals '(9 () ()))",
+            "(print-height-and-leaves '(9 () ()))"),
+            '(9)\n(9)\n(9)\n(1 1)\n')
+        self.assertEqual(evaluate(
+            "(print-all-traversals '(1 (2 (3 () ()) ()) ()))",
+            "(print-height-and-leaves '(1 (2 (3 () ()) ()) ()))"),
+            '(3 2 1)\n(1 2 3)\n(3 2 1)\n(3 1)\n')
+
     def test_empty_tree(self):
         self.assertEqual(evaluate(
             "(print-inorder '())",
