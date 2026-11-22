@@ -22,5 +22,5 @@ jobs:
         run: |
           command -v swipl
           command -v racket
-          python3 -m unittest discover -s tests -v 2>&1 | tee /tmp/ppl-tests.log
-          ! grep -Eq "skipped=[1-9]|\.\.\. skipped" /tmp/ppl-tests.log
+          set -o pipefail
+          python3 tools/run_strict_tests.py 2>&1 | tee /tmp/ppl-tests.log
