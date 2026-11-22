@@ -117,6 +117,9 @@ class RuntimeP2Tests(unittest.TestCase):
 
     def test_no_equation(self):
         self.assertEqual(all_equations([2, 3, 4]), [])
+        self.assertEqual(goal_output(
+            'generate_equation([2,3,4],_) -> write(unexpected) ; write(failed)'),
+            'failed')
 
     def test_unique_equation(self):
         self.assertEqual(all_equations([2, 4, 8]), ['2*4=8'])
@@ -134,6 +137,9 @@ class RuntimeP2Tests(unittest.TestCase):
         self.assertTrue(all('/' not in e for e in all_equations([0, 0, 0])))
         self.assertIn('6/3=2', all_equations([6, 3, 2]))
         self.assertIn('6=3*2', all_equations([6, 3, 2]))
+        self.assertIn('4/(1-3)=0-2', all_equations([4, 1, 3, 0, 2]))
+        self.assertNotIn('1/2*2=1', all_equations([1, 2, 2, 1]))
+        self.assertNotIn('0/(1-1)=0', all_equations([0, 1, 1, 0]))
 
     def test_count_agrees_with_list(self):
         for numbers in ([4, 2, 5, 3], [2, 3, 4], [0, 0], [6, 3, 2]):
