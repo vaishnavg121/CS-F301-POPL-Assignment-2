@@ -20,3 +20,19 @@
         (my-reverse result)
         (loop (cdr remaining)
               (cons (fn (car remaining)) result)))))
+
+;; Produce a list transformer for a supplied original-length predicate.
+;; () is a nested list too, so test null? as well as pair? for child lists.
+(define (make-inserter x len-ok?)
+  (letrec ((walk
+            (lambda (lst)
+              (let ((new-elements
+                     (my-map (lambda (element)
+                               (if (or (pair? element) (null? element))
+                                   (walk element)
+                                   element))
+                             lst)))
+                (if (len-ok? (my-length lst))
+                    (cons x new-elements)
+                    new-elements)))))
+    walk))
