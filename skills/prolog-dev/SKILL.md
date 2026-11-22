@@ -20,7 +20,7 @@ description: Incrementally implement and check CS F301 Assignment 2 predicates i
 - `swipl -q -f code/id_q1.pl -g main -t halt`
 - `swipl -q -f code/id_q1.pl -g "count_solutions([1,2,3,4,5,6,7,8],N),writeln(N)" -t halt`
 - `swipl -q -f code/id_q2.pl -g "all_equations([4,2,5,3],E),writeln(E)" -t halt`
-- Run `tests/` files separately with SWI-Prolog plunit tests where appropriate.
+- Run `python3 tools/run_strict_tests.py` for the complete suite. To run the two Prolog test files only, use `python3 -m unittest discover -s tests -p 'test_p*.py' -v`.
 
 ## Self-review checklist
 
