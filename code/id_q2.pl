@@ -83,3 +83,9 @@ generate_equation(List, Equation) :-
     format_expression(LeftTree, LeftText),
     format_expression(RightTree, RightText),
     format(string(Equation), '~s=~s', [LeftText, RightText]).
+
+% all_equations(+List, -Equations)
+% sort/2 orders SWI strings and removes any duplicate serializations.
+all_equations(List, Equations) :-
+    findall(Equation, generate_equation(List, Equation), Unsorted),
+    sort(Unsorted, Equations).
