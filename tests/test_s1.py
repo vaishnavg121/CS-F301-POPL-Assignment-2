@@ -6,7 +6,11 @@ import subprocess
 import tempfile
 import unittest
 
-SOURCE = pathlib.Path(__file__).resolve().parents[1] / 'code' / 'id_q3.rkt'
+CODE_DIR = pathlib.Path(__file__).resolve().parents[1] / "code"
+SOURCES = sorted(CODE_DIR.glob("*_q3.rkt"))
+if len(SOURCES) != 1:
+    raise RuntimeError(f"Expected one *_q3.rkt in {CODE_DIR}; found {SOURCES}")
+SOURCE = SOURCES[0]
 RACKET = shutil.which('racket')
 
 

@@ -6,7 +6,11 @@ import shutil
 import subprocess
 import unittest
 
-SOURCE = pathlib.Path(__file__).resolve().parents[1] / "code" / "id_q2.pl"
+CODE_DIR = pathlib.Path(__file__).resolve().parents[1] / "code"
+SOURCES = sorted(CODE_DIR.glob("*_q2.pl"))
+if len(SOURCES) != 1:
+    raise RuntimeError(f"Expected one *_q2.pl in {CODE_DIR}; found {SOURCES}")
+SOURCE = SOURCES[0]
 SWIPL = shutil.which("swipl")
 
 
