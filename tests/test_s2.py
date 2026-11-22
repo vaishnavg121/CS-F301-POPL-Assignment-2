@@ -96,6 +96,15 @@ class RuntimeS2Tests(unittest.TestCase):
             expected = '(9 ' + expected + ')'
         self.assertEqual(read_and_print('9', nested, 2), expected + '\n')
 
+    def test_threshold_and_symbol_atom(self):
+        # Parent has exactly n entries (no insert); each child remains eligible.
+        self.assertEqual(read_and_print('z', '((a) ())', 2),
+                         '((z a) (z))\n')
+        self.assertEqual(read_and_print('z', '(a (b c) () (d ()))', 3),
+                         '(a (z b c) (z) (z d (z)))\n')
+        self.assertEqual(read_and_print('z', '(() (a))', 0),
+                         '(() (a))\n')
+
     def test_wide_list_ten_thousand_elements(self):
         nested = '(' + ' '.join(['1'] * 10000) + ')'
         self.assertEqual(read_and_print('9', nested, 2, timeout=65), nested + '\n')
