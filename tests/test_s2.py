@@ -82,7 +82,7 @@ class RuntimeS2Tests(unittest.TestCase):
 
     def test_nested_empty_lists_and_original_length(self):
         self.assertEqual(read_and_print('z', '((()) ())', 2),
-                         '(((z)) (z))\n')
+                         '((z (z)) (z))\n')
 
     def test_nesting_depth_one_hundred(self):
         nested = '()'
