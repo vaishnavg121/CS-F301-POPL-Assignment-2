@@ -14,10 +14,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y swi-prolog-nox racket python3
-          swipl --version
-          racket --version
+          swipl --version | tee /tmp/swipl-version.txt
+          racket --version | tee /tmp/racket-version.txt
+          grep -Eq "version 9\." /tmp/swipl-version.txt
+          grep -Eq "v8\." /tmp/racket-version.txt
       - name: Execute all four test files
         run: |
           command -v swipl
           command -v racket
-          python3 -m unittest discover -s tests -v
+          python3 -m unittest discover -s tests -v 2>&1 | tee /tmp/ppl-tests.log
+          ! grep -Eq "skipped=[1-9]|\.\.\. skipped" /tmp/ppl-tests.log
