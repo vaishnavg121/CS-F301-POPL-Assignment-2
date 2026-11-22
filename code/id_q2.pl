@@ -70,3 +70,16 @@ format_expression(op(Op, Left, Right), String) :-
     ;   RightString = RightBare
     ),
     format(string(String), '~s~w~s', [LeftString, Op, RightString]).
+
+% generate_equation(+List, -Equation)
+% Split the given numbers at exactly one equals sign, retaining their order.
+% Both expression trees are evaluated before their strings are constructed.
+generate_equation(List, Equation) :-
+    append(LeftNumbers, RightNumbers, List),
+    LeftNumbers = [_|_],
+    RightNumbers = [_|_],
+    expression(LeftNumbers, LeftTree, Value),
+    expression(RightNumbers, RightTree, Value),
+    format_expression(LeftTree, LeftText),
+    format_expression(RightTree, RightText),
+    format(string(Equation), '~s=~s', [LeftText, RightText]).
