@@ -95,6 +95,17 @@ class ReferenceP2Tests(unittest.TestCase):
         self.assertEqual(reference_equations([2, 4, 8]), ['2*4=8'])
         self.assertEqual(reference_equations([0, 0]), ['0=0'])
 
+    def test_reference_additional_edge_cases(self):
+        # Independent exhaustive reference: repeated numbers, zero and mixed operators.
+        for numbers in ([0, 0], [1, 1, 1], [1, 2, 0, 0],
+                        [2, 2, 2, 2], [1, 2, 3, 4], [6, 3, 2]):
+            with self.subTest(numbers=numbers):
+                expected = reference_equations(tuple(numbers))
+                self.assertEqual(expected, sorted(set(expected)))
+                self.assertTrue(all(isinstance(e, str) and e.count('=') == 1
+                                    for e in expected))
+
+
 
 @unittest.skipUnless(SWIPL, 'SWI-Prolog runtime not installed')
 class RuntimeP2Tests(unittest.TestCase):
@@ -130,6 +141,29 @@ class RuntimeP2Tests(unittest.TestCase):
                 self.assertEqual(int(goal_output(
                     f'count_equations({numbers},N),format("~d",[N])')),
                     len(all_equations(numbers)))
+
+    def test_equation_set_matches_independent_reference(self):
+        for numbers in ([0, 0], [1, 1, 1], [1, 2, 0, 0],
+                        [2, 2, 2, 2], [1, 2, 3, 4], [6, 3, 2]):
+            with self.subTest(numbers=numbers):
+                self.assertEqual(all_equations(numbers),
+                                 reference_equations(tuple(numbers)))
+
+    def test_canonical_formatter_tree_structure(self):
+        cases = [
+            ("op('*',op('+',num(4),num(2)),num(3))", '(4+2)*3'),
+            ("op('*',op('/',num(8),num(4)),num(2))", '8/4*2'),
+            ("op('/',num(8),op('*',num(4),num(2)))", '8/(4*2)'),
+            ("op('-',op('-',num(1),num(2)),num(3))", '1-2-3'),
+            ("op('-',num(1),op('-',num(2),num(3)))", '1-(2-3)'),
+            ("op('+',num(1),op('+',num(2),num(3)))", '1+(2+3)'),
+            ("op('+',op('+',num(1),num(2)),num(3))", '1+2+3'),
+            ("op('+',num(1),op('*',num(2),num(3)))", '1+2*3'),
+        ]
+        for tree, expected in cases:
+            with self.subTest(tree=tree):
+                self.assertEqual(goal_output(
+                    f"format_expression({tree},S),format('~s',[S])"), expected)
 
     def test_return_type_is_string(self):
         self.assertEqual(goal_output(
