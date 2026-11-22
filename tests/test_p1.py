@@ -73,6 +73,8 @@ class RuntimeP1Tests(unittest.TestCase):
     def test_solution_counts(self):
         for clues, expected in (
             ('[]', '13824'),
+            ('[2,8]', '1440'),
+            ('[2,8,8]', '1440'),
             ('[1,2,3,4,5,6,7,8]', '3'),
             ('[1,2,3,4,5,6,7,8,9]', '1'),
         ):
