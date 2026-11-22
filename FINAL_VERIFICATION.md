@@ -20,3 +20,7 @@ The repository contains four source files, one test file per problem, both requi
 - Prepare both students for the individual viva. The new review prompts document the final review stages. The original implementation prompts retain their original scope.
 
 See [README.md](README.md) for commands and [TEST_AUDIT.md](TEST_AUDIT.md) for coverage.
+
+## Follow-up audit
+
+The expanded suite passed all 31 tests with zero failures and zero skips using SWI-Prolog 9.2.9 and Racket CS 8.18. It adds coverage for selected-clue counting, nested division, left-first traversal call order and width-10,000 insertion boundaries. The published project and rubric items remain described above. See [TEST_AUDIT.md](TEST_AUDIT.md) for runtime details and the [Actions page](https://github.com/vaishnavg121/CS-F301-POPL-Assignment-2/actions) for the latest workflow result.
