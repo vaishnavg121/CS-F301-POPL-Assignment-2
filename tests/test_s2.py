@@ -106,8 +106,12 @@ class RuntimeS2Tests(unittest.TestCase):
                          '(() (a))\n')
 
     def test_wide_list_ten_thousand_elements(self):
-        nested = '(' + ' '.join(['1'] * 10000) + ')'
-        self.assertEqual(read_and_print('9', nested, 2, timeout=65), nested + '\n')
+        elements = ' '.join(str(i % 10) for i in range(10000))
+        nested = f'({elements})'
+        self.assertEqual(read_and_print('z', nested, 10000, timeout=65),
+                         nested + '\n')
+        self.assertEqual(read_and_print('z', nested, 10001, timeout=65),
+                         f'(z {elements})\n')
 
 
 if __name__ == '__main__':
