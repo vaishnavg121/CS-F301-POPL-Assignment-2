@@ -30,3 +30,5 @@ Dana = [research, c++, data]
 ```
 
 The counts were verified in SWI-Prolog 9.2.9 and cross-checked by independent exhaustive enumeration of all `4! × 4! × 4! = 13,824` bijective attribute assignments.
+
+Among the three original solutions, the AI-project friend is Alex in design, Carla in testing, or Carla in design. The testing condition keeps only the second assignment.
