@@ -70,3 +70,16 @@ The runner writes `verification_windows.log` locally; the log is ignored by
 Git. Python is required for the test harness. Tests discover the four source
 files by suffix (`*_q1.pl`, `*_q2.pl`, `*_q3.rkt`, `*_q4.rkt`), so group-ID
 renaming does not break them.
+
+## Supplemental audit
+
+See `TEST_AUDIT.md` for the exact completed checks and unresolved blockers.
+The portable optional source-level reference checks can also run with Python:
+
+```bash
+python3 tools/offline_scheme_sim.py
+python3 tools/randomized_audit.py
+```
+
+These secondary checks use a restricted Python evaluator rather than the
+Racket executable and must never be reported as a Racket 8.x test pass.
