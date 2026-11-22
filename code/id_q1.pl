@@ -60,3 +60,15 @@ solution_for_clues(Active, Solution) :-
 count_solutions(Active, N) :-
     findall(Solution, solution_for_clues(Active, Solution), Solutions),
     length(Solutions, N).
+
+% Print one solution of the repaired puzzle in the required order and layout.
+main :-
+    once(solution_for_clues([1,2,3,4,5,6,7,8,9],
+        [p('Alex', AlexDept, AlexLang, AlexProject),
+         p('Ben', BenDept, BenLang, BenProject),
+         p('Carla', CarlaDept, CarlaLang, CarlaProject),
+         p('Dana', DanaDept, DanaLang, DanaProject)])),
+    format('Alex = [~w, ~w, ~w]~n', [AlexDept, AlexLang, AlexProject]),
+    format('Ben = [~w, ~w, ~w]~n', [BenDept, BenLang, BenProject]),
+    format('Carla = [~w, ~w, ~w]~n', [CarlaDept, CarlaLang, CarlaProject]),
+    format('Dana = [~w, ~w, ~w]~n', [DanaDept, DanaLang, DanaProject]).
