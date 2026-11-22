@@ -1,5 +1,7 @@
 """P2: exact SWI-Prolog equation lists, empties and division edge cases."""
 import pathlib
+import itertools
+from functools import lru_cache
 import shutil
 import subprocess
 import unittest
@@ -22,6 +24,72 @@ def all_equations(numbers):
     goal = (f"all_equations({numbers},Es),"
             "forall(member(E,Es),format('~s~n',[E]))")
     return goal_output(goal).splitlines()
+
+
+def precedence(operator):
+    return 2 if operator in ("*", "/") else 1
+
+
+def print_reference_tree(tree):
+    if len(tree) == 1:
+        return str(tree[0])
+    op, left, right = tree
+    a, b = print_reference_tree(left), print_reference_tree(right)
+    if len(left) > 1 and precedence(left[0]) < precedence(op):
+        a = "(" + a + ")"
+    if len(right) > 1 and precedence(right[0]) <= precedence(op):
+        b = "(" + b + ")"
+    return a + op + b
+
+
+@lru_cache(maxsize=None)
+def reference_expressions(numbers):
+    if len(numbers) == 1:
+        return [((numbers[0],), numbers[0])]
+    results = []
+    for cut in range(1, len(numbers)):
+        for (left, a), (right, b) in itertools.product(
+                reference_expressions(numbers[:cut]),
+                reference_expressions(numbers[cut:])):
+            for op in ("+", "-", "*", "/"):
+                if op == "+":
+                    value = a + b
+                elif op == "-":
+                    value = a - b
+                elif op == "*":
+                    value = a * b
+                else:
+                    if b == 0 or a % b:
+                        continue
+                    value = a // b
+                results.append(((op, left, right), value))
+    return results
+
+
+def reference_equations(numbers):
+    output = []
+    for cut in range(1, len(numbers)):
+        left = reference_expressions(tuple(numbers[:cut]))
+        right = reference_expressions(tuple(numbers[cut:]))
+        rights_by_value = {}
+        for tree, value in right:
+            rights_by_value.setdefault(value, []).append(tree)
+        for tree, value in left:
+            for equal_tree in rights_by_value.get(value, []):
+                output.append(print_reference_tree(tree) + "=" +
+                              print_reference_tree(equal_tree))
+    return sorted(set(output))
+
+
+class ReferenceP2Tests(unittest.TestCase):
+    def test_reference_equation_examples(self):
+        self.assertEqual(reference_equations([4, 2, 5, 3]), [
+            '4*2-5=3', '4*2=5+3', '4-2=5-3', '4/2=5-3',
+            '4=2*(5-3)', '4=2+(5-3)', '4=2+5-3',
+        ])
+        self.assertEqual(reference_equations([2, 3, 4]), [])
+        self.assertEqual(reference_equations([2, 4, 8]), ['2*4=8'])
+        self.assertEqual(reference_equations([0, 0]), ['0=0'])
 
 
 @unittest.skipUnless(SWIPL, 'SWI-Prolog runtime not installed')
