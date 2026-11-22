@@ -1,39 +1,40 @@
 #lang racket/base
 
-;; S1: build inorder values using an accumulator suffix.
-;; Passing the suffix directly avoids forbidden append and reverse helpers.
-(define (inorder-onto tree suffix)
+;; Accumulate in reverse so each left subtree is visited before the right.
+(define (inorder-reversed tree values)
   (if (null? tree)
-      suffix
-      (inorder-onto (cadr tree)
-                    (cons (car tree)
-                          (inorder-onto (caddr tree) suffix)))))
+      values
+      (let ((after-left (inorder-reversed (cadr tree) values)))
+        (inorder-reversed (caddr tree) (cons (car tree) after-left)))))
+
+(define (preorder-reversed tree values)
+  (if (null? tree)
+      values
+      (let ((after-left (preorder-reversed (cadr tree) (cons (car tree) values))))
+        (preorder-reversed (caddr tree) after-left))))
+
+(define (postorder-reversed tree values)
+  (if (null? tree)
+      values
+      (let* ((after-left (postorder-reversed (cadr tree) values))
+             (after-right (postorder-reversed (caddr tree) after-left)))
+        (cons (car tree) after-right))))
+
+(define (reverse-values values)
+  (let loop ((remaining values) (result '()))
+    (if (null? remaining)
+        result
+        (loop (cdr remaining) (cons (car remaining) result)))))
 
 (define (print-inorder tree)
-  (display (inorder-onto tree '()))
+  (display (reverse-values (inorder-reversed tree '())))
   (newline))
 
-;; Traverse preorder and postorder with suffix passing and no extra built-ins.
-(define (preorder-onto tree suffix)
-  (if (null? tree)
-      suffix
-      (cons (car tree)
-            (preorder-onto (cadr tree)
-                           (preorder-onto (caddr tree) suffix)))))
-
-(define (postorder-onto tree suffix)
-  (if (null? tree)
-      suffix
-      (postorder-onto (cadr tree)
-                      (postorder-onto (caddr tree)
-                                      (cons (car tree) suffix)))))
-
 (define (print-all-traversals tree)
-  (display (inorder-onto tree '()))
+  (print-inorder tree)
+  (display (reverse-values (preorder-reversed tree '())))
   (newline)
-  (display (preorder-onto tree '()))
-  (newline)
-  (display (postorder-onto tree '()))
+  (display (reverse-values (postorder-reversed tree '())))
   (newline))
 
 ;; Return (height leaf-count) while visiting each subtree only once.
