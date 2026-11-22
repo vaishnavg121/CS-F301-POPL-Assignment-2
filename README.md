@@ -60,7 +60,7 @@ With both language runtimes on your PATH, run `python3 tools/run_strict_tests.py
 powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1
 ```
 
-The strict suite passed **30 tests with zero failures and zero skips** on Windows using SWI-Prolog 9.2.9 and Racket 8.18. GitHub Actions also passed the full suite. See [FINAL_VERIFICATION.md](FINAL_VERIFICATION.md) for run details.
+The expanded strict suite passed **31 tests with zero failures and zero skips** using SWI-Prolog 9.2.9 and Racket 8.18. See [TEST_AUDIT.md](TEST_AUDIT.md) for the local runtime evidence and the [Actions page](https://github.com/vaishnavg121/CS-F301-POPL-Assignment-2/actions) for CI.
 
 ## Before submission
 
