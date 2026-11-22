@@ -31,7 +31,7 @@ The two Racket commands load definitions only and intentionally print nothing. T
 python3 -m unittest discover -s tests -v
 ```
 
-The tests skip runtime assertions if either interpreter is missing. Therefore a local run reporting `OK (skipped=...)` **does not** establish runtime correctness. The checked-in GitHub Actions workflow installs both runtimes before executing tests; CI cannot run until the repository is pushed to GitHub.
+The tests skip runtime assertions if either interpreter is missing. The GitHub Actions workflow now fails if either required runtime major version is absent or if any tests are skipped. Therefore a local run reporting `OK (skipped=...)` **does not** establish runtime correctness. The checked-in GitHub Actions workflow installs both runtimes before executing tests; CI cannot run until the repository is pushed to GitHub.
 
 ## Submission and collaboration checks
 
@@ -44,3 +44,29 @@ The tests skip runtime assertions if either interpreter is missing. Therefore a 
 ## Current verification note
 
 The required local Prolog and Racket runtimes were unavailable in the authoring environment. Independent reference checks reproduced P1's solution counts (3 before repair, 1 after) and all three P2 equation examples. Static Scheme checks and source-parenthesis balance passed. The runtime tests must still execute in an actual SWI-Prolog 9.x/Racket 8.x installation or via GitHub Actions.
+
+## Windows laptop validation
+
+The project includes `tools/verify_windows.ps1`, which finds installed language
+runtimes (also searching standard Program Files locations), verifies **SWI-Prolog
+9.x** and **Racket 8.x**, and executes all tests. It fails if tests are skipped.
+
+From Windows PowerShell in the repository root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1
+```
+
+If either runtime is absent, the optional `-InstallRuntimes` flag tries to
+install an appropriate 9.x/8.x version through WinGet; if those versions are
+not offered, install the exact required major versions from the official
+archives and rerun:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\verify_windows.ps1 -InstallRuntimes
+```
+
+The runner writes `verification_windows.log` locally; the log is ignored by
+Git. Python is required for the test harness. Tests discover the four source
+files by suffix (`*_q1.pl`, `*_q2.pl`, `*_q3.rkt`, `*_q4.rkt`), so group-ID
+renaming does not break them.
